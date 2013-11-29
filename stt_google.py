@@ -19,7 +19,7 @@ def listen_for_speech():
     FORMAT = pyaudio.paInt16
     CHANNELS = 1
     RATE = 16000
-    THRESHOLD = 180 #The threshold intensity that defines silence signal (lower than).
+    THRESHOLD = 250 #The threshold intensity that defines silence signal (lower than).
     SILENCE_LIMIT = 2 #Silence limit in seconds. The max ammount of seconds where only silence is recorded. When this time passes the recording finishes and the file is delivered.
 
     #open stream
@@ -85,7 +85,7 @@ def stt_google_wav(filename):
     f.close()
 
     #post it
-    lang_code='en-US'
+    lang_code='fr-FR'
     googl_speech_url = 'https://www.google.com/speech-api/v1/recognize?xjerr=1&client=chromium&pfilter=2&lang=%s&maxresults=6'%(lang_code)
     hrs = {"User-Agent": "Mozilla/5.0 (X11; Linux i686) AppleWebKit/535.7 (KHTML, like Gecko) Chrome/16.0.912.63 Safari/535.7",'Content-type': 'audio/x-flac; rate=16000'}
     req = urllib2.Request(googl_speech_url, data=flac_cont, headers=hrs)
