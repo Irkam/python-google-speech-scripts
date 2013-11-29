@@ -5,7 +5,6 @@ from collections import deque
 import os
 import urllib.request
 import json
-from ctypes import *
 import time
 
 def py_error_handler(filename, line, function, err, fmt):
@@ -21,13 +20,9 @@ def listen_for_speech():
     FORMAT = pyaudio.paInt16
     CHANNELS = 1
     RATE = 16000
-    THRESHOLD = 150 #The threshold intensity that defines silence signal (lower than).
+    THRESHOLD = 650 #The threshold intensity that defines silence signal (lower than).
     SILENCE_LIMIT = 2 #Silence limit in seconds. The max ammount of seconds where only silence is recorded. When this time passes the recording finishes and the file is delivered.
-    ERROR_HANDLER_FUNC = CFUNCTYPE(None, c_char_p, c_int, c_char_p, c_int, c_char_p)
 
-    c_error_handler = ERROR_HANDLER_FUNC(py_error_handler)
-    asound = cdll.LoadLibrary('/usr/lib32/libasound.so.2')
-    asound.snd_lib_error_set_handler(c_error_handler)
     #open stream
     p = pyaudio.PyAudio()
 
