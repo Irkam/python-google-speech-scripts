@@ -4,17 +4,15 @@ import audioop
 from collections import deque 
 import os
 import urllib.request
-import json
 import time
 
-def py_error_handler(filename, line, function, err, fmt):
-    pass
 
 def listen_for_speech():
     """
     Does speech recognition using Google's speech  recognition service.
     Records sound from microphone until silence is found and save it as WAV and then converts it to FLAC. Finally, the file is sent to Google and the result is returned.
     """
+
     #config
     chunk = 1024
     FORMAT = pyaudio.paInt16
@@ -60,6 +58,7 @@ def listen_for_speech():
             all_m= []
             print("listening ...")
 
+    print("* done recording")
     stream.close()
     p.terminate()
 
@@ -79,7 +78,6 @@ def save_speech(data, p):
 
 def stt_google_wav(filename):
     #Convert to flac
-    FLAC_CONV = 'flac -f '
     os.system(FLAC_CONV+ filename+'.wav')
     f = open(filename+'.flac','rb')
     flac_cont = f.read()
@@ -91,12 +89,11 @@ def stt_google_wav(filename):
     hrs = {"User-Agent": "Mozilla/5.0 (X11; Linux i686) AppleWebKit/535.7 (KHTML, like Gecko) Chrome/16.0.912.63 Safari/535.7",'Content-type': 'audio/x-flac; rate=16000'}
     req = urllib.request.Request(googl_speech_url, data=flac_cont, headers=hrs)
     p = urllib.request.urlopen(req)
-    res=[]
-    rep=""
-    try:
-        res = eval(p.read())['hypotheses']
-        rep=json.loads(res.decode('utf-8','ignore'))['hypotheses'][0]['utterance']
-    except:
+    r=eval(p.read())['hypotheses']
+    rep=r[0]
+    rep=rep.get('utterance')
+    
+    if rep=="":
         rep="pas compris"
     map(os.remove, (filename+'.flac', filename+'.wav'))
     print("rep="+str(rep))
