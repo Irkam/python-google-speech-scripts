@@ -7,7 +7,6 @@ import urllib.request
 import json
 from ctypes import *
 
-import Client
 
 def py_error_handler(filename, line, function, err, fmt):
     pass
